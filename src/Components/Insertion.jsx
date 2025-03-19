@@ -55,7 +55,7 @@ const Insertion = () => {
         </div>
         <div className='elements'>
           <h2>Enter Array Elements</h2>
-          <input id="size_arr" name="size" placeholder='Size of Array' value={element} onChange={((e) => {
+          <input id="size_arr" name="size" placeholder='Elements of the Array' value={element} onChange={((e) => {
             setelement(e.target.value)
           })} />
         </div>
