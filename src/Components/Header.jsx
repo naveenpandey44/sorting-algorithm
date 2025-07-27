@@ -9,13 +9,12 @@ const Header = () => {
           <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 mb-4">
             Visual Sort
           </h1>
-          <div className="space-y-2">
+          <div className="space-y-2 mb-4">
             <h2 className="text-3xl font-semibold text-gray-200">VISUALIZE SORT</h2>
-            <p className="text-gray-400 text-lg">Experience Sorting Algorithms in Action</p>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="m-16 items-center">
           <h3 className="text-2xl font-semibold text-center mb-8 text-gray-200">
             Sorting Algorithms
           </h3>
