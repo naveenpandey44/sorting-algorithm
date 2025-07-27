@@ -1,100 +1,128 @@
+import React from 'react';
 import { useState } from 'react';
 
 async function heapSort(arr, setArray) {
-  let n = arr.length;
+  const n = arr.length;
 
+  // Build max heap
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-      await heapify(arr, n, i, setArray);
+    await heapify(arr, n, i, setArray);
   }
 
+  // Extract elements from heap one by one
   for (let i = n - 1; i > 0; i--) {
-      [arr[0], arr[i]] = [arr[i], arr[0]];
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await heapify(arr, i, 0, setArray);
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    setArray([...arr]);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await heapify(arr, i, 0, setArray);
   }
+
   return arr;
 }
 
 async function heapify(arr, n, i, setArray) {
   let largest = i;
-  let left = 2 * i + 1;
-  let right = 2 * i + 2;
+  const left = 2 * i + 1;
+  const right = 2 * i + 2;
 
   if (left < n && arr[left] > arr[largest]) {
-      largest = left;
+    largest = left;
   }
 
   if (right < n && arr[right] > arr[largest]) {
-      largest = right;
+    largest = right;
   }
 
   if (largest !== i) {
-      [arr[i], arr[largest]] = [arr[largest], arr[i]];
-      setArray([...arr]);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await heapify(arr, n, largest, setArray);
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    setArray([...arr]);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await heapify(arr, n, largest, setArray);
   }
 }
 
 const Heap = () => {
+  const [array, setArray] = useState([]);
+  const [size, setSize] = useState();
+  const [element, setelement] = useState("");
 
-   const [array, setArray] = useState([]);
-            const [size, setSize] = useState(5)
-            const [element, setelement] = useState("")
-          
-            const handleSort = async () => {
-              let arr = array.map(Number);
-              await heapSort(arr, setArray);
-              setArray(arr);
-          };
-          
-            const handleGenerateArray = () => {
-              const newArray = element.split(',').map(num => parseInt(num.trim(), 10)).filter(num => !isNaN(num));
-              console.log(newArray,newArray.length)
-              if (newArray.length == size) {
-                setArray(newArray);
-              } else {
-                console.log(newArray)
-                alert(`Please enter exactly ${size} numbers.`);
-              }
-            };
+  const handleSort = async () => {
+    let arr = array.map(Number);
+    await heapSort(arr, setArray);
+  };
+
+  const handleGenerateArray = () => {
+    const newArray = element.split(',').map(num => parseInt(num.trim(), 10)).filter(num => !isNaN(num));
+    if (newArray.length == size) {
+      setArray(newArray);
+    } else {
+      alert(`Please enter exactly ${size} numbers.`);
+    }
+  };
 
   return (
-    <>
-    <div className="main">
-    <h1>Heap Sort</h1>
-      <div className='size'>
-        <div className='arr_size'>
-          <h2>Enter the Size of Array</h2>
-          <input type="number" id="size_arr" name="size" value={size}placeholder='Size of Array' onChange={((e) => {
-            setSize(e.target.value)
-          })} />
-        </div>
-        <div className='elements'>
-          <h2>Enter Array Elements</h2>
-          <input id="size_arr" name="size" placeholder='Elements of the Array' value={element} onChange={((e) => {
-            setelement(e.target.value)
-          })} />
-        </div>
-      </div>
-      <div className='btn'>
-        <input type="button" value="Set Array" className='submit' onClick={handleGenerateArray} />
-        <input type="button" value="Sort" className='submit' onClick={handleSort} />
-      </div>
+    <div className="min-h-screen bg-gray-900 text-white py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-indigo-600">
+          Heap Sort Visualization
+        </h1>
 
-      <div id = "chart" style={{ display: 'flex', alignItems: 'flex-end', height: '300px', gap: '10px', marginTop: '20px' }}>
-              {array.map((value, index) => (
-                  <div key={index} id="inner" >
-                    <div style={{ width: '45px', height: `${value * 3}px`, backgroundColor: 'blue', textAlign: 'center', color: 'white', transition: 'height 0.5s ease-in-out' }}>
-                    </div>
-                      {value}
-                  </div>
-              ))}
+        <div className="bg-gray-800 rounded-lg p-6 shadow-xl mb-8">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-300">Array Size</h2>
+              <input
+                type="number"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                placeholder="Size of Array"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white"
+              />
+            </div>
+            
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-300">Array Elements</h2>
+              <input
+                value={element}
+                onChange={(e) => setelement(e.target.value)}
+                placeholder="Enter comma-separated numbers"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 text-white"
+              />
+            </div>
           </div>
-    </div>
-  </>
-  )
-}
 
-export default Heap
+          <div className="flex justify-center gap-4 mt-6">
+            <button
+              onClick={handleGenerateArray}
+              className="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-md transition-colors duration-200 font-medium"
+            >
+              Set Array
+            </button>
+            <button
+              onClick={handleSort}
+              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors duration-200 font-medium"
+            >
+              Sort
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
+          <div className="flex items-end justify-center h-[300px] gap-2">
+            {array.map((value, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div
+                  className="w-12 bg-gradient-to-t from-cyan-600 to-indigo-400 rounded-t-md transition-all duration-500 ease-in-out"
+                  style={{ height: `${value * 3}px` }}
+                />
+                <span className="mt-2 text-sm text-gray-400">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Heap;

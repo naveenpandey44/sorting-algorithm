@@ -1,3 +1,4 @@
+import React from 'react';
 import {useState} from 'react'
 
 async function quickSort(arr, setArray, low = 0, high = arr.length - 1) {
@@ -28,63 +29,88 @@ async function partition(arr, low, high, setArray) {
 
 
 const Quick = () => {
-
   const [array, setArray] = useState([]);
-        const [size, setSize] = useState(5)
-        const [element, setelement] = useState("")
-      
-        const handleSort = async () => {
-          let arr = array.map(Number);
-          await quickSort(arr, setArray);
-          setArray(arr);
-      };
-      
-        const handleGenerateArray = () => {
-          const newArray = element.split(',').map(num => parseInt(num.trim(), 10)).filter(num => !isNaN(num));
-          console.log(newArray,newArray.length)
-          if (newArray.length == size) {
-            setArray(newArray);
-          } else {
-            console.log(newArray)
-            alert(`Please enter exactly ${size} numbers.`);
-          }
-        };
+  const [size, setSize] = useState();
+  const [element, setelement] = useState("");
+
+  const handleSort = async () => {
+    let arr = array.map(Number);
+    await quickSort(arr, setArray);
+    setArray(arr);
+  };
+
+  const handleGenerateArray = () => {
+    const newArray = element.split(',').map(num => parseInt(num.trim(), 10)).filter(num => !isNaN(num));
+    if (newArray.length == size) {
+      setArray(newArray);
+    } else {
+      alert(`Please enter exactly ${size} numbers.`);
+    }
+  };
 
   return (
-    <>
-    <div className="main">
-    <h1>Quick Sort</h1>
-      <div className='size'>
-        <div className='arr_size'>
-          <h2>Enter the Size of Array</h2>
-          <input type="number" id="size_arr" name="size" value={size}placeholder='Size of Array' onChange={((e) => {
-            setSize(e.target.value)
-          })} />
-        </div>
-        <div className='elements'>
-          <h2>Enter Array Elements</h2>
-          <input id="size_arr" name="size" placeholder='Elements of the Array' value={element} onChange={((e) => {
-            setelement(e.target.value)
-          })} />
-        </div>
-      </div>
-      <div className='btn'>
-        <input type="button" value="Set Array" className='submit' onClick={handleGenerateArray} />
-        <input type="button" value="Sort" className='submit' onClick={handleSort} />
-      </div>
+    <div className="min-h-screen bg-gray-900 text-white py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-600">
+          Quick Sort Visualization
+        </h1>
 
-      <div id = "chart" style={{ display: 'flex', alignItems: 'flex-end', height: '300px', gap: '10px', marginTop: '20px' }}>
-              {array.map((value, index) => (
-                  <div key={index} id="inner" >
-                    <div style={{ width: '45px', height: `${value * 3}px`, backgroundColor: 'blue', textAlign: 'center', color: 'white', transition: 'height 0.5s ease-in-out' }}>
-                    </div>
-                      {value}
-                  </div>
-              ))}
+        <div className="bg-gray-800 rounded-lg p-6 shadow-xl mb-8">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-300">Array Size</h2>
+              <input
+                type="number"
+                value={size}
+                onChange={(e) => setSize(e.target.value)}
+                placeholder="Size of Array"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 text-white"
+              />
+            </div>
+            
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-gray-300">Array Elements</h2>
+              <input
+                value={element}
+                onChange={(e) => setelement(e.target.value)}
+                placeholder="Enter comma-separated numbers"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 text-white"
+              />
+            </div>
           </div>
+
+          <div className="flex justify-center gap-4 mt-6">
+            <button
+              onClick={handleGenerateArray}
+              className="px-6 py-2 bg-amber-600 hover:bg-amber-700 rounded-md transition-colors duration-200 font-medium"
+            >
+              Set Array
+            </button>
+            <button
+              onClick={handleSort}
+              className="px-6 py-2 bg-orange-600 hover:bg-orange-700 rounded-md transition-colors duration-200 font-medium"
+            >
+              Sort
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
+          <div className="flex items-end justify-center h-[300px] gap-2">
+            {array.map((value, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div
+                  className="w-12 bg-gradient-to-t from-amber-600 to-orange-400 rounded-t-md transition-all duration-500 ease-in-out"
+                  style={{ height: `${value * 3}px` }}
+                />
+                <span className="mt-2 text-sm text-gray-400">{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
-  </>
-  )
+  );
 }
 
 export default Quick
